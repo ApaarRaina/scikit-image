@@ -78,6 +78,7 @@ def map_array(input_arr, input_vals, output_vals, out=None, unknown=0):
     # ensure all arrays have matching types before sending to Cython
     input_vals = input_vals.astype(input_arr.dtype, copy=False)
     output_vals = output_vals.astype(out.dtype, copy=False)
+    unknown = out.dtype.type(unknown)
     _map_array(input_arr, out_view, input_vals, output_vals, unknown)
     return out
 
