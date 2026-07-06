@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def map_array(input_arr, input_vals, output_vals, out=None):
+def map_array(input_arr, input_vals, output_vals, unknown=0, out=None):
     """Map values from input array from input_vals to output_vals.
 
     Parameters
@@ -12,6 +12,10 @@ def map_array(input_arr, input_vals, output_vals, out=None):
         The values to map from.
     output_vals : array, shape (K,)
         The values to map to.
+    unknown : scaler or str
+        Defines what happens to the values which were unmapped
+        if unknown='keep' then the input arrays values are kept
+        otherwise if unknown is any other integer all the unmapped values are mapped to this value
     out : array, same shape as `input_arr`
         The output array. Will be created if not provided. It should
         have the same dtype as `output_vals`.
@@ -48,6 +52,8 @@ def map_array(input_arr, input_vals, output_vals, out=None):
     # "When a view is desired in as many cases as possible,
     # arr.reshape(-1) may be preferable."
     input_arr = input_arr.reshape(-1)
+    if type(unknown) is str and unknown != 'keep':
+        raise ValueError("unknown param must be an scaler or 'keep'")
     if out is None:
         out = np.empty(orig_shape, dtype=output_vals.dtype)
     elif out.shape != orig_shape:
@@ -69,7 +75,7 @@ def map_array(input_arr, input_vals, output_vals, out=None):
     # ensure all arrays have matching types before sending to Cython
     input_vals = input_vals.astype(input_arr.dtype, copy=False)
     output_vals = output_vals.astype(out.dtype, copy=False)
-    _map_array(input_arr, out_view, input_vals, output_vals)
+    _map_array(input_arr, out_view, input_vals, output_vals, unknown)
     return out
 
 
