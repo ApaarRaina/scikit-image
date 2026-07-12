@@ -114,6 +114,7 @@ def gaussian(
         ),
         np.min(image),
         np.max(image),
+        out=out,
     )
 
 
