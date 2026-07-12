@@ -313,9 +313,8 @@ def _convert(image, dtype, force_copy=False, uniform=False):
         if np.min(image) < -1.0 or np.max(image) > 1.0:
             image_min = np.min(image)
             image_max = np.max(image)
-            if (
-                (image_min >= -1.0 or np.isclose(image_min, -1.0, atol=1e-7))
-                and (image_max <= 1.0 or np.isclose(image_max, 1.0, atol=1e-7))
+            if (image_min >= -1.0 or np.isclose(image_min, -1.0, atol=1e-7)) and (
+                image_max <= 1.0 or np.isclose(image_max, 1.0, atol=1e-7)
             ):
                 image = np.clip(image, -1.0, 1.0)
             else:
